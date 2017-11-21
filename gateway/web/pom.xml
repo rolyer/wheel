@@ -14,6 +14,12 @@
     <dependencies>
         <dependency>
             <groupId>com.wheel</groupId>
+            <artifactId>wheel-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.wheel</groupId>
             <artifactId>gateway-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

@@ -11,5 +11,16 @@
 
     <artifactId>wheel-service</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.wheel</groupId>
+            <artifactId>wheel-dao</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wheel</groupId>
+            <artifactId>wheel-dao</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
