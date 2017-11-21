@@ -1,0 +1,84 @@
+<Configuration status="info" monitorInterval="30">
+    <Properties>
+        <property name="logPattern">%-5p %d %c{1.@ [%t] %m%n</property>
+    </Properties>
+    <Appenders>
+        <RollingRandomAccessFile name="RollingRandomAccessFile" fileName="../log/app.log"
+                                 filePattern="../log/$@date:yyyy-MM@/app-%d{MM-dd-yyyy@-%i.log">
+            <!--输出warn, info, debug, trace日志-->
+            <PatternLayout>
+                <Pattern>${logPattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <!--一天一切-->
+                <TimeBasedTriggeringPolicy/>
+                <!--250m一切-->
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="2000">
+                <Delete basePath="../log" maxDepth="2">
+                    <IfFileName glob="**/*.log*">
+                        <IfAny>
+                            <IfAccumulatedFileSize exceeds="10GB"/>
+                            <IfLastModified age="30d"/>
+                            <!--<IfAccumulatedFileCount exceeds="15"/>-->
+                        </IfAny>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="RollingRandomAccessFileErr" fileName="../log/app.log.err"
+                                 filePattern="../log/$@date:yyyy-MM@/app-%d{MM-dd-yyyy@-%i.log.err">
+            <!--输出error, fatal日志-->
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <Pattern>${logPattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="2000"/>
+        </RollingRandomAccessFile>
+
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout charset="UTF-8">
+                <Pattern>${logPattern}</Pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <logger name="java.sql.Connection" level="@log4jLevel@" additivity="false">
+            <AppenderRef ref="RollingRandomAccessFile" level="@log4jLevel@"/>
+            <AppenderRef ref="STDOUT" level="@log4jConsoleLevel@"/>
+        </logger>
+        <logger name="java.sql.Statement" level="@log4jLevel@" additivity="false">
+            <AppenderRef ref="RollingRandomAccessFile" level="@log4jLevel@"/>
+            <AppenderRef ref="STDOUT" level="@log4jConsoleLevel@"/>
+        </logger>
+        <logger name="java.sql.PreparedStatement" level="@log4jLevel@" additivity="false">
+            <AppenderRef ref="RollingRandomAccessFile" level="@log4jLevel@"/>
+            <AppenderRef ref="STDOUT" level="@log4jConsoleLevel@"/>
+        </logger>
+        <logger name="com.http.httphelper" level="@log4jLevel@" additivity="false">
+            <AppenderRef ref="RollingRandomAccessFile" level="@log4jLevel@"/>
+            <AppenderRef ref="STDOUT" level="@log4jConsoleLevel@"/>
+        </logger>
+        <logger name="org.apache.http" level="@log4jLevel@" additivity="false">
+            <AppenderRef ref="RollingRandomAccessFile" level="@log4jLevel@"/>
+            <AppenderRef ref="STDOUT" level="@log4jConsoleLevel@"/>
+        </logger>
+
+        <Logger name="com.wheel" level="@log4jLevel@" additivity="false">
+            <AppenderRef ref="RollingRandomAccessFile" level="@log4jLevel@"/>
+            <AppenderRef ref="RollingRandomAccessFileErr"/>
+            <AppenderRef ref="STDOUT" level="@log4jConsoleLevel@"/>
+        </Logger>
+        <!--includelocation 得商量一下 到底设置还是不设置-->
+        <Root level="@log4jConsoleLevel@" includeLocation="true">
+            <AppenderRef ref="RollingRandomAccessFile"/>
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+    </Loggers>
+</Configuration>

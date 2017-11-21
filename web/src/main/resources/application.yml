@@ -1,0 +1,53 @@
+server:
+    port: 9090
+    context-path: /api
+logging:
+    config: classpath:log4j2.xml
+
+spring:
+    datasource:
+        name: test
+        url: @jdbc_url@
+        username: @jdbc_username@
+        password: @jdbc_password@
+        # 使用druid数据源
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: @jdbc_driverClassName@
+        filters: stat
+        maxActive: 20
+        initialSize: 5
+        maxWait: 60000
+        minIdle: 1
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
+    http:
+        encoding:
+            fore: true
+            charset: utf-8
+            enabled: true
+        tomcat:
+            uri-encoding: utf-8
+
+mybatis:
+    type-aliases-package: com.ncf.emc.dao.mapper
+    mapper-locations: classpath:mapper/*.xml
+
+mapper:
+    mappers:
+        - com.wheel.dao.base.BaseMapper
+        - tk.mybatis.mapper.common.special.InsertListMapper
+    not-empty: false
+    identity: MYSQL
+    style: camelhump
+
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
